@@ -31,7 +31,17 @@ class ProjectController{
 
     addComment = async function (req, res) {
         console.log("UserController.addComment");
-        const data = await repo.addComment(req.body.username, req.body.project_id, req.body.comment);
+        const data = await repo.addComment(
+            req.body.user.username, 
+            req.body.project_id, 
+            req.body.comment
+        );
+        return res.status(data.code).json(data);
+    }
+
+    getComments = async function (req, res) {
+        console.log("UserController.getComments");
+        const data = await repo.getComments(req.params.project_id);
         return res.status(data.code).json(data);
     }
 }

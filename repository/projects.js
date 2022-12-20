@@ -69,8 +69,72 @@ join agencies on(projects."exec" = agencies.code);`);
         }
     }
 
+    // insert comments in comments table
     addComment = async function (username, project_id, comment) {
+        const client = await getConnection()
+        try {
+            const data = await client.query(
+                `INSERT INTO comments (username, project_id, comment, time_stamp) 
+                VALUES ($1, $2, $3, current_timestamp)`,
+                [username, project_id, comment]
+            );
+            client.release();
+            if (data.rowCount == 0) {
+                return {
+                    success: false,
+                    code: 500,
+                    message: "Internal server error."
+                }
+            }
+            return {
+                success: true,
+                code: 201,
+                message: "Comment added."
+            }
+        } catch (err) {
+            console.log(err);
+            client.release();
+            return {
+                success: false,
+                code: 500,
+                message: "Internal server error."
+            }
+        }
+    }
 
+    // get all the comments from "comments" table
+    getComments = async function (project_id) {
+        console.log("ProjectRepository.getComments: " + project_id);
+        const client = await getConnection()
+        try {
+            const data = await client.query(
+                `SELECT * FROM comments WHERE project_id = $1`,
+                [project_id]
+            );
+            client.release();
+            if (data.rowCount == 0) {
+                return {
+                    success: false,
+                    code: 500,
+                    message: "Internal server error."
+                }
+            }
+            return {
+                success: true,
+                code: 200,
+                message: `Total ${data.rowCount} comments found.`,
+                data: data.rows
+            }
+        }
+        catch (err) {
+            console.log(err);
+            client.release();
+            return {
+                success: false,
+                code: 500,
+                message: "Internal server error."
+            }
+        }
     }
 }
 module.exports = ProjectRepository;

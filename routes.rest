@@ -56,3 +56,17 @@ Authorization: {{token}}
     "project_id":"proj1655",
     "rating":3
 }
+
+### add comment 
+POST {{api_url}}/api/projects/comment
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "project_id":"proj9280",
+    "comment":"test comment 2"
+}
+
+### get all comment by project id
+GET {{api_url}}/api/projects/comment/proj9280   
+Authorization: {{token}}
