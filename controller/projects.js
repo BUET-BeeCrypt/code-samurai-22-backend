@@ -14,5 +14,25 @@ class ProjectController{
         const data = await repo.insert(req.body);
         return res.status(200).json(data);
     }
+
+    addRating = async function (req, res) {
+        console.log("UserController.addRating");
+        const data = await repo.addRating(
+            req.body.user.username,
+            req.body.project_id,
+            req.body.rating
+        );
+        return res.status(data.code).json({
+            message: data.message,
+            code: data.code,
+            data: data.data
+        });
+    }
+
+    addComment = async function (req, res) {
+        console.log("UserController.addComment");
+        const data = await repo.addComment(req.body.username, req.body.project_id, req.body.comment);
+        return res.status(data.code).json(data);
+    }
 }
 module.exports = ProjectController;

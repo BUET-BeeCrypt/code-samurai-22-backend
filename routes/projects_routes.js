@@ -6,4 +6,5 @@ const router = PromiseRouter();
 const controller = new ProjectController();
 
 router.get("/all", authenticateToken ,controller.findAll);
+router.post("/rating",authenticateToken, controller.addRating)
 module.exports = router;

@@ -20,7 +20,11 @@ class AuthRepository {
 
             if (res.rowCount == 0) {
                 client.release();
-                return { success: false, code: 500, message: "Internal server error." }
+                return { 
+                    success: false, 
+                    code: 500, 
+                    message: "Internal server error." 
+                }
             }
             client.release();
             return { success: true, code: 201, message: "User created." }

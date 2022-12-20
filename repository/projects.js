@@ -4,8 +4,11 @@ class ProjectRepository {
     findAll = async function () {
         const client = await getConnection()
         const data = await client.query(
-            `SELECT projects.*, agencies.name as agency FROM projects
-            join agencies on(projects."exec" = agencies.code);`);
+            `SELECT p.*, agencies.name as agency,
+(SELECT cast(coalesce(avg(rating), 0) as integer) from ratings where ratings.project_id = p.project_id) as rating,
+(SELECT cast(coalesce(count(username), 0) as integer) from ratings where ratings.project_id = p.project_id) as total_rating
+FROM projects p
+join agencies on(p."exec" = agencies.code)`);
         client.release();
         return data.rows 
     }
@@ -30,6 +33,44 @@ join agencies on(projects."exec" = agencies.code);`);
         const res = await client.query(`SELECT projects.*, agencies.name as agency FROM projects
 join agencies on(projects."exec" = agencies.code);`);
         client.release();
+    }
+
+    addRating = async function (username, project_id, rating) {
+        const client = await getConnection()
+        try {
+            const data = await client.query(
+                `INSERT INTO ratings (username, project_id, rating) 
+                VALUES ($1, $2, $3) ON CONFLICT
+                ON CONSTRAINT ratings_pk
+                DO UPDATE SET rating = $3`,
+                [username, project_id, rating]
+            );
+            client.release();
+            if (data.rowCount == 0) {
+                return {
+                    success: false,
+                    code: 500,
+                    message: "Internal server error."
+                }
+            }
+            return {
+                success: true,
+                code: 201,
+                message: "Rating added."
+            }
+        } catch (err) {
+            console.log(err);
+            client.release();
+            return {
+                success: false,
+                code: 500,
+                message: "Internal server error."
+            }
+        }
+    }
+
+    addComment = async function (username, project_id, comment) {
+
     }
 }
 module.exports = ProjectRepository;

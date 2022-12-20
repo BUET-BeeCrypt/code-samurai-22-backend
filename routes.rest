@@ -39,5 +39,20 @@ Authorization: {{token}}
     "role": "lol"
 }
 
+######################
+### project cruds ###
+#####################
+
 ### get projects
 GET {{api_url}}/api/projects/all
+Authorization: {{token}}
+
+### add project rating
+POST {{api_url}}/api/projects/rating
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "project_id":"proj1655",
+    "rating":3
+}
