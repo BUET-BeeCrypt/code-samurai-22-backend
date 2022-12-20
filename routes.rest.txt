@@ -1,0 +1,102 @@
+@api_url=http://localhost:3000
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6IlNZU0FETUlOIiwiaWF0IjoxNjcxNTc0NTM3LCJleHAiOjE2NzI3ODQxMzd9.Hfi_ZgMYWq7j1SydKfJaEWefjLPLQRk3FD6ZcwJkhd4
+
+### registration
+POST {{api_url}}/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "ecnec",
+    "password": "ecnec"
+}
+
+### login
+POST {{api_url}}/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "admin", 
+    "password": "admin" 
+}
+
+### update user role
+POST {{api_url}}/api/auth/updateRole
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "username": "exec",
+    "role": "EXEC"
+}
+
+### get user types: all user
+GET {{api_url}}/api/auth/userType
+Authorization: {{token}}
+
+### get all the users: admin only
+GET {{api_url}}/api/auth/users
+Authorization: {{token}}
+
+### get user by username: admin only
+GET {{api_url}}/api/auth/user/test
+Authorization: {{token}}
+
+
+
+######################
+### project cruds ###
+#####################
+
+### get projects
+GET {{api_url}}/api/projects/all
+Authorization: {{token}}
+
+### add project rating
+POST {{api_url}}/api/projects/rating
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "project_id":"proj1655",
+    "rating":3
+}
+
+### add comment 
+POST {{api_url}}/api/projects/comment
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "project_id":"proj9280",
+    "comment":"test comment 2"
+}
+
+### get all comment by project id
+GET {{api_url}}/api/projects/comment/proj9280   
+Authorization: {{token}}
+
+### Add a proposal: exec only
+POST {{api_url}}/api/projects/proposal
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "project_id":"prop1111",
+    "name":"test proposal",
+    "location":"Rangunia",
+    "latitude":22.462428,
+    "longitude":91.9198443,
+    "timespan":2,
+    "goal": "test goal",
+    "proposal_date":"2022-12-21",
+    "exec": "RDA",
+    "cost": 3
+}
+
+### get proposal by project id
+GET {{api_url}}/api/projects/proposal/prop1111
+Authorization: {{token}}
+
+### get all proposals
+GET {{api_url}}/api/projects/proposals
+Authorization: {{token}}
