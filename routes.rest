@@ -20,3 +20,7 @@ Content-Type: application/json
     "password": "admin",
     "role":"SYSADMIN"
 }
+
+### get projects
+GET {{api_url}}/api/projects/all
+
