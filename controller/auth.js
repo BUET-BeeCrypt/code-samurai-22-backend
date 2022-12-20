@@ -9,11 +9,11 @@ class AuthController{
         const cred = req.body;
         const username = cred.username;
         const password = await bcyrpt.hash(cred.password, 10);
-        const role = cred.role;
-        if (!username || !password || !role)
+        if (!username || !password)
             return res.status(400).json({ message: "Bad request." });
 
-        const data = await repo.register(username, password, role);
+        // default role APP
+        const data = await repo.register(username, password, "APP");
         if (!data.success){
             return res.status(data.code).json(data);
         }
@@ -51,6 +51,41 @@ class AuthController{
 
 
         return res.status(200).json({token:jwt});
+    }
+
+    // only system admin can update user role
+    updateUserRole = async function (req, res){
+        // check user permision
+        const req_role = req.body.user.role;
+        if(req_role !== "SYSADMIN"){
+            return res.status(403).json({
+                message: "Permission denied.",
+                code: 401
+            });
+        }
+
+        const role = req.body.role;
+        const username = req.body.username;
+
+        // check if user exist
+        const user = await repo.getUser(username);
+        if(!user.success){
+            return res.status(user.code).json({
+                message: user.message,
+                code: user.code
+            });
+        }
+
+        // update role
+        const updateRes = await repo.updateUserRole(username, role);
+        if (!updateRes.success){
+            return res.status(updateRes.code).json({
+                message: updateRes.message,
+                code: updateRes.code
+            });
+        }
+
+        return res.status(200).json(updateRes);
     }
 }
 module.exports = AuthController;

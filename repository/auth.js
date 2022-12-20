@@ -39,7 +39,9 @@ class AuthRepository {
         console.log("AuthRepository.register");
         const client = await getConnection();
         try {
-            var res = await client.query('SELECT * FROM users WHERE username = $1', [username]);
+            var res = await client.query(
+                'SELECT * FROM users WHERE username = $1',
+                [username]);
             client.release();
             // console.table(res.rows);
             if(res.rows.length == 0){
@@ -53,5 +55,32 @@ class AuthRepository {
             return { success: false, code: 500, message: "Internal server error." }
         }
     }
+
+    updateUserRole = async function (username, role) {
+        console.log("AuthRepository.register");
+        const client = await getConnection();
+        try{
+            const res = await client.query(
+                'UPDATE users SET role = $1 WHERE username = $2',
+                [role, username]
+            );
+            client.release();
+            if(res.rowCount == 0){
+                return { success: false, code: 404, message: "User not found." }
+            }
+            return {success: true, code: 200, message: `User role updated to ${role}.`}
+        }
+        catch (err) {
+            console.log(err.message);
+            // check if err.message contains "violates foreign key constraint"
+            // as substring
+            if(err.message.includes("violates foreign key constraint")){
+                return { success: false, code: 404, message: `Role ${role} not found.` }
+            }
+            client.release();
+            return { success: false, code: 500, message: "Internal server error." }
+        }
+    }
+
 }
 module.exports = AuthRepository
