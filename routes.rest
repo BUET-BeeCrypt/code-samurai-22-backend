@@ -17,8 +17,7 @@ Content-Type: application/json
 
 {
     "username": "admin",
-    "password": "admin",
-    "role":"SYSADMIN"
+    "password": "admin"
 }
 
 ### get projects

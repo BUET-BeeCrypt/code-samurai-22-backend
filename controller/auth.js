@@ -25,9 +25,8 @@ class AuthController{
         const cred = req.body;
         const username = cred.username;
         const password = cred.password;
-        const role = cred.role;
 
-        if(!username || !password || !role)
+        if(!username || !password)
             return res.status(400).json({message: "Bad request."});
         
         const user = await repo.getUser(username);
@@ -47,7 +46,7 @@ class AuthController{
             });
         }
 
-        const token = {username: username, role: role};
+        const token = {username: username, role: user.data.role};
         const jwt = generateJwtToken(token);
 
 
