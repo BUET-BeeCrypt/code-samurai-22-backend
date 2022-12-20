@@ -20,10 +20,10 @@ class AuthRepository {
 
             if (res.rowCount == 0) {
                 client.release();
-                return { 
-                    success: false, 
-                    code: 500, 
-                    message: "Internal server error." 
+                return {
+                    success: false,
+                    code: 500,
+                    message: "Internal server error."
                 }
             }
             client.release();
@@ -48,12 +48,12 @@ class AuthRepository {
                 [username]);
             client.release();
             // console.table(res.rows);
-            if(res.rows.length == 0){
+            if (res.rows.length == 0) {
                 return { success: false, code: 404, message: "User not found." }
             }
-            return {success: true, code: 200, message: "User found.", data: res.rows[0]}
-            
-        }catch(err){
+            return { success: true, code: 200, message: "User found.", data: res.rows[0] }
+
+        } catch (err) {
             console.log(err);
             client.release();
             return { success: false, code: 500, message: "Internal server error." }
@@ -63,22 +63,22 @@ class AuthRepository {
     updateUserRole = async function (username, role) {
         console.log("AuthRepository.register");
         const client = await getConnection();
-        try{
+        try {
             const res = await client.query(
                 'UPDATE users SET role = $1 WHERE username = $2',
                 [role, username]
             );
             client.release();
-            if(res.rowCount == 0){
+            if (res.rowCount == 0) {
                 return { success: false, code: 404, message: "User not found." }
             }
-            return {success: true, code: 200, message: `User role updated to ${role}.`}
+            return { success: true, code: 200, message: `User role updated to ${role}.` }
         }
         catch (err) {
             console.log(err.message);
             // check if err.message contains "violates foreign key constraint"
             // as substring
-            if(err.message.includes("violates foreign key constraint")){
+            if (err.message.includes("violates foreign key constraint")) {
                 return { success: false, code: 404, message: `Role ${role} not found.` }
             }
             client.release();
@@ -86,5 +86,52 @@ class AuthRepository {
         }
     }
 
+    // get user types
+    getUserTypes = async function () {
+        console.log("AuthRepository.getUserTypes");
+        const client = await getConnection();
+        try {
+            const res = await client.query('SELECT * FROM user_types');
+            client.release();
+            return { success: true, code: 200, message: `Tolal ${res.rowCount} user types found.`, data: res.rows }
+        } catch (err) {
+            console.log(err);
+            client.release();
+            return { success: false, code: 500, message: "Internal server error." }
+        }
+    }
+
+    // get all users
+    getAllUsers = async function () {
+        console.log("AuthRepository.getAllUsers");
+        const client = await getConnection();
+        try {
+            const res = await client.query('SELECT username,role FROM users');
+            client.release();
+            return { success: true, code: 200, message: `Tolal ${res.rowCount} users found.`, data: res.rows }
+        } catch (err) {
+            console.log(err);
+            client.release();
+            return { success: false, code: 500, message: "Internal server error." }
+        }
+    }
+
+    // get user by username
+    getUser = async function (username) {
+        console.log("AuthRepository.getUser");
+        const client = await getConnection();
+        try {
+            const res = await client.query('SELECT username,role FROM users WHERE username = $1', [username]);
+            client.release();
+            if (res.rowCount == 0) {
+                return { success: false, code: 404, message: "User not found." }
+            }
+            return { success: true, code: 200, message: `User found.`, data: res.rows[0] }
+        } catch (err) {
+            console.log(err);
+            client.release();
+            return { success: false, code: 500, message: "Internal server error." }
+        }
+    }
 }
 module.exports = AuthRepository

@@ -87,5 +87,43 @@ class AuthController{
 
         return res.status(200).json(updateRes);
     }
+
+    // get user types
+    getUserTypes = async function (req, res){
+        const userTypes = await repo.getUserTypes();
+        return res.status(userTypes.code).json(userTypes);
+    }
+
+    // get all users: admin only
+    getAllUsers = async function (req, res){
+        // check user permision
+        const req_role = req.body.user.role;
+        if(req_role !== "SYSADMIN"){
+            return res.status(403).json({
+                message: "Permission denied.",
+                code: 401
+            });
+        }
+
+        const users = await repo.getAllUsers();
+        return res.status(users.code).json(users);
+    }
+
+    // get user by username: admin only
+    getUser = async function (req, res){
+        // check user permision
+        const req_role = req.body.user.role;
+        if(req_role !== "SYSADMIN"){
+            return res.status(403).json({
+                message: "Permission denied.",
+                code: 401
+            });
+        }
+
+        const username = req.params.username;
+        console.log(username);
+        const user = await repo.getUser(username);
+        return res.status(user.code).json(user);
+    }
 }
 module.exports = AuthController;

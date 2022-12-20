@@ -29,6 +29,20 @@ Authorization: {{token}}
     "role": "EXEC"
 }
 
+### get user types: all user
+GET {{api_url}}/api/auth/userType
+Authorization: {{token}}
+
+### get all the users: admin only
+GET {{api_url}}/api/auth/users
+Authorization: {{token}}
+
+### get user by username: admin only
+GET {{api_url}}/api/auth/user/test
+Authorization: {{token}}
+
+
+
 ######################
 ### project cruds ###
 #####################
@@ -61,7 +75,7 @@ Authorization: {{token}}
 GET {{api_url}}/api/projects/comment/proj9280   
 Authorization: {{token}}
 
-### Add a proposal
+### Add a proposal: exec only
 POST {{api_url}}/api/projects/proposal
 Content-Type: application/json
 Authorization: {{token}}
