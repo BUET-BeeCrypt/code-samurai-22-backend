@@ -1,23 +1,13 @@
 @api_url=http://localhost:3000
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6IlNZU0FETUlOIiwiaWF0IjoxNjcxNTU3NjA3LCJleHAiOjE2NzI3NjcyMDd9.dAoGHrfmVhPBuT_S9jMKlFx5Bfuurm2B1zt4rbmRbzo
-
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6IlNZU0FETUlOIiwiaWF0IjoxNjcxNTc0NTM3LCJleHAiOjE2NzI3ODQxMzd9.Hfi_ZgMYWq7j1SydKfJaEWefjLPLQRk3FD6ZcwJkhd4
 
 ### registration
 POST {{api_url}}/api/auth/register
 Content-Type: application/json
 
 {
-    "username": "admin",
-    "password": "admin",
-}
-
-### test user registration
-POST {{api_url}}/api/auth/register
-Content-Type: application/json
-
-{
-    "username": "test",
-    "password": "test"
+    "username": "ecnec",
+    "password": "ecnec"
 }
 
 ### login
@@ -25,8 +15,8 @@ POST {{api_url}}/api/auth/login
 Content-Type: application/json
 
 {
-    "username": "admin",
-    "password": "admin"
+    "username": "admin", 
+    "password": "admin" 
 }
 
 ### update user role
@@ -35,8 +25,8 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "username": "test",
-    "role": "lol"
+    "username": "exec",
+    "role": "EXEC"
 }
 
 ######################
@@ -69,4 +59,30 @@ Authorization: {{token}}
 
 ### get all comment by project id
 GET {{api_url}}/api/projects/comment/proj9280   
+Authorization: {{token}}
+
+### Add a proposal
+POST {{api_url}}/api/projects/proposal
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "project_id":"prop1111",
+    "name":"test proposal",
+    "location":"Rangunia",
+    "latitude":22.462428,
+    "longitude":91.9198443,
+    "timespan":2,
+    "goal": "test goal",
+    "proposal_date":"2022-12-21",
+    "exec": "RDA",
+    "cost": 3
+}
+
+### get proposal by project id
+GET {{api_url}}/api/projects/proposal/prop1111
+Authorization: {{token}}
+
+### get all proposals
+GET {{api_url}}/api/projects/proposals
 Authorization: {{token}}

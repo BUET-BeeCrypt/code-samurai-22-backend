@@ -9,4 +9,7 @@ router.get("/all", authenticateToken ,controller.findAll);
 router.post("/rating",authenticateToken, controller.addRating)
 router.post("/comment",authenticateToken, controller.addComment)
 router.get("/comment/:project_id",authenticateToken, controller.getComments)
+router.post("/proposal",authenticateToken, controller.addProposal)
+router.get("/proposal/:project_id",authenticateToken, controller.getProposal)
+router.get("/proposals",authenticateToken, controller.getAllProposals)
 module.exports = router;

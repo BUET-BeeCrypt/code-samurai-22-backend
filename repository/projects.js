@@ -136,5 +136,121 @@ join agencies on(projects."exec" = agencies.code);`);
             }
         }
     }
+
+    // project_id, // unique id of the project, prop<id>
+    // name, // title of the project
+    // location,latitue,longitude,
+    // timespan, // Timespan of the project in years
+    // goal, // objective of the project
+    // proposal_date, // when was the project proposed
+    // exec, // executing agency
+    // cost // projeced cost in cores
+    addProposal = async function (
+        project_id, name, location,
+        latitude, longitude, timespan, goal,
+        proposal_date, exec, cost) {
+        const client = await getConnection()
+        try {
+            const data = await client.query(
+                `INSERT INTO proposals 
+                (project_id, name, location, latitude, 
+                longitude, timespan, goal, proposal_date,
+                exec, cost) 
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+                [project_id, name, location, latitude, longitude, timespan, goal, proposal_date, exec, cost]
+            );
+            client.release();
+            if (data.rowCount == 0) {
+                return {
+                    success: false,
+                    code: 500,
+                    message: "Internal server error."
+                }
+            }
+            return {
+                success: true,
+                code: 201,
+                message: "Proposal added."
+            }
+        } catch (err) {
+            console.log(err);
+            client.release();
+            return {
+                success: false,
+                code: 500,
+                message: "Internal server error."
+            }
+        }
+    }
+
+    //get proposal by project_id
+    getProposal = async function (project_id) {
+        const client = await getConnection()
+        try {
+            const data = await client.query(
+                `SELECT * FROM proposals WHERE project_id = $1`,
+                [project_id]
+            );
+            client.release();
+            if (data.rowCount == 0) {
+                return {
+                    success: false,
+                    code: 500,
+                    message: "Internal server error."
+                }
+            }
+            return {
+                success: true,
+                code: 200,
+                message: `Proposal found.`,
+                data: data.rows[0]
+            }
+        }
+        catch (err) {
+            console.log(err);
+            client.release();
+            return {
+                success: false,
+                code: 500,
+                message: "Internal server error."
+            }
+        }
+    }
+
+    // get all the proposals from "proposals" table
+    getAllProposals = async function () {
+        console.log("ProjectRepository.getAllProposals")
+        const client = await getConnection()
+        try {
+            const data = await client.query(
+                `SELECT * FROM proposals`
+            );
+            client.release();
+            if (data.rowCount == 0) {
+                return {
+                    success: false,
+                    code: 404,
+                    message: "No proposal found."
+                }
+            }
+            return {
+                success: true,
+                code: 200,
+                message: `Total ${data.rowCount} proposals found.`,
+                data: data.rows
+            }
+        }
+        catch (err) {
+            console.log(err);
+            client.release();
+            return {
+                success: false,
+                code: 500,
+                message: "Internal server error."
+            }
+        }
+    }
+
+
 }
 module.exports = ProjectRepository;

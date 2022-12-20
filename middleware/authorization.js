@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 function authenticateToken(req, res, next){
     const token = req.headers["authorization"]; // token
     //console.log(`authenticateToken token: ${token}`);
-    if(token === null)
+    if(token === null || token === undefined || token === "")
         return res.status(401).json({code: 401, message: "Not authorized."})
     
     // verify token
