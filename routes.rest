@@ -1,0 +1,22 @@
+@api_url=http://localhost:3000
+
+
+### registration
+POST {{api_url}}/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "admin",
+    "role":"SYSADMIN"
+}
+
+### login
+POST {{api_url}}/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "admin",
+    "role":"SYSADMIN"
+}
