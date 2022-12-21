@@ -6,7 +6,8 @@
   "type": "commonjs",
   "scripts": {
     "dev": "nodemon .",
-    "start": "nodemon ."
+    "start": "nodemon .",
+    "optimize": "node ./optimize/OptimizeComponents.js"
   },
   "keywords": [
     "nodejs",
@@ -15,6 +16,7 @@
   "author": "Hasan Masum, Ashfaq Rahman",
   "license": "MIT",
   "dependencies": {
+    "@datastructures-js/priority-queue": "^6.1.4",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.1",
     "cors": "^2.8.5",
