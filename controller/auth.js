@@ -29,7 +29,7 @@ class AuthController{
         if(!username || !password)
             return res.status(400).json({message: "Bad request."});
         
-        const user = await repo.getUser(username);
+        const user = await repo.getUserWithPass(username);
 
         if(!user.success){
             return res.status(user.code).json({
@@ -37,7 +37,7 @@ class AuthController{
                 code: user.code
             });
         }
-
+        //console.table({password: password, userPassword: user.data.password})
         const passwordValid = await bcyrpt.compare(password, user.data.password);
         if(!passwordValid){
             return res.status(401).json({

@@ -39,7 +39,7 @@ class AuthRepository {
         console.log("AuthRepository.login");
     }
 
-    getUser = async function (username) {
+    getUserWithPass = async function (username) {
         console.log("AuthRepository.register");
         const client = await getConnection();
         try {
