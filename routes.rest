@@ -112,3 +112,7 @@ Authorization: {{token}}
     "project_id":"prop1111",
     "start_date":"2022-12-21"
 }
+
+### time
+GET {{api_url}}/api/optimization/all
+Authorization: {{token}}
