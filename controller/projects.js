@@ -141,6 +141,8 @@ class ProjectController{
                 message: "Permission denied. ECNEC can approve projects costing over BDT 50 crores."
             });
         }
+        const date = new Date();
+        const startDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
         //console.log("Permission granted.");
         const result = await repo.addProject(
             proposalData.data.project_id,
@@ -152,7 +154,7 @@ class ProjectController{
             proposalData.data.cost,
             proposalData.data.timespan,
             proposalData.data.goal,
-            req.body.start_date,
+            startDate,
             0, // completion percentage
             0 // actual cost
         )
