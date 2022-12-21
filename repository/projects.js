@@ -46,6 +46,14 @@ join agencies on(p."exec" = agencies.code)`);
             }
         }catch(err){
             console.log(err);
+            if (err.message.includes("duplicate key value violates unique constraint")){
+                client.release();
+                return {
+                    success: false,
+                    code: 409,
+                    message: "Project ID already exists."
+                }
+            }
             client.release();
             return {
                 success: false,
@@ -276,7 +284,40 @@ join agencies on(projects."exec" = agencies.code);`);
             }
         }
         catch (err) {
-            console.log(err);
+            console.log(err.message);
+            client.release();
+            return {
+                success: false,
+                code: 500,
+                message: "Internal server error."
+            }
+        }
+    }
+
+    // delete proposal by project_id
+    deleteProposal = async function (project_id) {
+        const client = await getConnection()
+        try {
+            const data = await client.query(
+                `DELETE FROM proposals WHERE project_id = $1`,
+                [project_id]
+            );
+            client.release();
+            if (data.rowCount == 0) {
+                return {
+                    success: false,
+                    code: 404,
+                    message: "Proposal not found."
+                }
+            }
+            return {
+                success: true,
+                code: 200,
+                message: `Proposal deleted.`
+            }
+        }
+        catch (err) {
+            console.log(err.message);
             client.release();
             return {
                 success: false,

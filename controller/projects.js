@@ -119,33 +119,29 @@ class ProjectController{
 
         const proposalData = await repo.getProposal(req.body.project_id);
         if(!proposalData.success){
-            return {
-                success: false,
-                code: 404,
-                message: "Project not found."
-            }
+            return req.status(proposalData.code).json(proposalData);
         }
         
-        console.table(proposalData.data);
+        //console.table(proposalData.data);
 
         if(proposalData.data.cost > 50 && req.body.user.role === "MOP"){
-            return {
+            return res.status(403).json({
                 success: false,
                 code: 403,
                 message: "Permission denied. MOP can approve projects costing up to BDT 50 crores."
-            }
+            });
         }
 
-        console.log("Permission granted.");
+        //console.log("Permission granted.");
 
         if(proposalData.data.cost <=50 && req.body.user.role === "ECNEC"){
-            return {
+            return res.status(403).json({
                 success: false,
                 code: 403,
                 message: "Permission denied. ECNEC can approve projects costing over BDT 50 crores."
-            }
+            });
         }
-        console.log("Permission granted.");
+        //console.log("Permission granted.");
         const result = await repo.addProject(
             proposalData.data.project_id,
             proposalData.data.name,
@@ -162,18 +158,20 @@ class ProjectController{
         )
 
         if (!result.success) {
-            return {
-                success: false,
-                code: 500,
-                message: "Internal server error."
-            }
+            return res.status(result.code).json(result);
         }
 
-        return {
+        // delete the proposal
+        const deleteResult = await repo.deleteProposal(req.body.project_id);
+        if (!deleteResult.success) {
+            return res.status(deleteResult.code).json(deleteResult);
+        }
+
+        return res.status(200).json({
             success: true,
             code: 200,
-            message: `Proposal approved.`
-        }
+            message: "Project approved."
+        });
     }
 }
 module.exports = ProjectController;

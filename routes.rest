@@ -1,6 +1,5 @@
 @api_url=http://localhost:3000
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1vcCIsInJvbGUiOiJNT1AiLCJpYXQiOjE2NzE1OTUwNzgsImV4cCI6MTY3MjgwNDY3OH0.pdNJz1ElSY4fyffyLZQRlParhrG9LQo7UUfVsvz5vKE
-
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1vcCIsInJvbGUiOiJNT1AiLCJpYXQiOjE2NzE1OTg4MzUsImV4cCI6MTY3MjgwODQzNX0.PxGVA7ZoL51mHQ5OmSNEp0DJYsSfQ2LDuSrjTvZnMgk
 
 ### registration
 POST {{api_url}}/api/auth/register
