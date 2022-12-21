@@ -105,5 +105,75 @@ class ProjectController{
         const data = await repo.getAllProposals();
         return res.status(data.code).json(data);
     }
+
+    // approve project: ECNEC and MOP only
+    approveProposal = async function (req, res) {
+        console.log("UserController.approveProject");
+        if (req.body.user.role != "MOP" && req.body.user.role != "ECNEC") {
+            return res.status(403).json({
+                success: false,
+                code: 403,
+                message: "Permission denied."
+            });
+        }
+
+        const proposalData = await repo.getProposal(req.body.project_id);
+        if(!proposalData.success){
+            return {
+                success: false,
+                code: 404,
+                message: "Project not found."
+            }
+        }
+        
+        console.table(proposalData.data);
+
+        if(proposalData.data.cost > 50 && req.body.user.role === "MOP"){
+            return {
+                success: false,
+                code: 403,
+                message: "Permission denied. MOP can approve projects costing up to BDT 50 crores."
+            }
+        }
+
+        console.log("Permission granted.");
+
+        if(proposalData.data.cost <=50 && req.body.user.role === "ECNEC"){
+            return {
+                success: false,
+                code: 403,
+                message: "Permission denied. ECNEC can approve projects costing over BDT 50 crores."
+            }
+        }
+        console.log("Permission granted.");
+        const result = await repo.addProject(
+            proposalData.data.project_id,
+            proposalData.data.name,
+            proposalData.data.location,
+            proposalData.data.latitude,
+            proposalData.data.longitude,
+            proposalData.data.exec,
+            proposalData.data.cost,
+            proposalData.data.timespan,
+            proposalData.data.goal,
+            req.body.start_date,
+            0, // completion percentage
+            0 // actual cost
+        )
+
+        if (!result.success) {
+            return {
+                success: false,
+                code: 500,
+                message: "Internal server error."
+            }
+        }
+
+        return {
+            success: true,
+            code: 200,
+            message: `Proposal approved.`
+        }
+    }
 }
 module.exports = ProjectController;

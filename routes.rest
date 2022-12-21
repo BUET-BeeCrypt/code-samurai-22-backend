@@ -1,5 +1,6 @@
 @api_url=http://localhost:3000
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6IlNZU0FETUlOIiwiaWF0IjoxNjcxNTc0NTM3LCJleHAiOjE2NzI3ODQxMzd9.Hfi_ZgMYWq7j1SydKfJaEWefjLPLQRk3FD6ZcwJkhd4
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1vcCIsInJvbGUiOiJNT1AiLCJpYXQiOjE2NzE1OTUwNzgsImV4cCI6MTY3MjgwNDY3OH0.pdNJz1ElSY4fyffyLZQRlParhrG9LQo7UUfVsvz5vKE
+
 
 ### registration
 POST {{api_url}}/api/auth/register
@@ -15,8 +16,8 @@ POST {{api_url}}/api/auth/login
 Content-Type: application/json
 
 {
-    "username": "admin", 
-    "password": "admin" 
+    "username": "mop", 
+    "password": "mop" 
 }
 
 ### update user role
@@ -25,8 +26,8 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "username": "exec",
-    "role": "EXEC"
+    "username": "ecnec",
+    "role": "ECNEC"
 }
 
 ### get user types: all user
@@ -100,3 +101,14 @@ Authorization: {{token}}
 ### get all proposals
 GET {{api_url}}/api/projects/proposals
 Authorization: {{token}}
+
+
+### approve proposal: MOP and ECNEC only
+POST {{api_url}}/api/projects/proposal/approve
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "project_id":"prop1111",
+    "start_date":"2022-12-21"
+}

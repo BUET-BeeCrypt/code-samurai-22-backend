@@ -12,4 +12,5 @@ router.get("/comment/:project_id",authenticateToken, controller.getComments)
 router.post("/proposal",authenticateToken, controller.addProposal)
 router.get("/proposal/:project_id",authenticateToken, controller.getProposal)
 router.get("/proposals",authenticateToken, controller.getAllProposals)
+router.post("/proposal/approve",authenticateToken, controller.approveProposal)
 module.exports = router;

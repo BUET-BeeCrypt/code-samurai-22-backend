@@ -13,12 +13,47 @@ join agencies on(p."exec" = agencies.code)`);
         return data.rows 
     }
 
-    insert = async function (data) {
-        const client = await getConnection()
-        const res = await client.query(
-            `SELECT projects.*, agencies.name as agency FROM projects
-            join agencies on(projects."exec" = agencies.code);`);
-        client.release();
+    addProject = async function (
+        project_id, name, location, latitude, longitude,
+        exec, cost, timespan, goal, start_date,
+        completion, actual_cost
+    ) {
+        console.log("ProjectRepository.addProject")
+        const client = await getConnection();
+        try{
+            const res = await client.query(
+                `INSERT INTO projects (project_id, name, location, latitude, longitude,
+            exec, cost, timespan, goal, start_date,
+            completion, actual_cost) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+                [project_id, name, location, latitude, longitude,
+                    exec, cost, timespan, goal, start_date,
+                    completion, actual_cost]
+            );
+            client.release();
+            // check if project was added
+            if (res.rowCount == 0) {
+                return {
+                    success: false,
+                    code: 500,
+                    message: "Failed to add project."
+                }
+            }
+
+            return {
+                success: true,
+                code: 201,
+                message: "Project added successfully."
+            }
+        }catch(err){
+            console.log(err);
+            client.release();
+            return {
+                success: false,
+                code: 500,
+                message: "Internal server error."
+            }
+        }
+        
     }
 
     update = async function (data) {
@@ -250,7 +285,5 @@ join agencies on(projects."exec" = agencies.code);`);
             }
         }
     }
-
-
 }
 module.exports = ProjectRepository;
